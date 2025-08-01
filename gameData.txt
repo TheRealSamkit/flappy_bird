@@ -1,0 +1,2 @@
+skins=default
+highScore=38
