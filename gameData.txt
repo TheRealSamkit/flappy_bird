@@ -1,2 +1,2 @@
 skins=default
-highScore=38
+highScore=12

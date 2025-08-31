@@ -3,36 +3,68 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
-    private static final String FILE_PATH = "gameData.txt";
+    private static final String DATA_FILE = "gameData.txt";
+    private static Map<String, String> data = new HashMap<>();
 
-    // Load score and skins
+    static {
+        load();
+    }
+
+    // Load data from file and return the map
     public static Map<String, String> load() {
-        Map<String, String> data = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        data.clear();
+        File file = new File(DATA_FILE);
+        if (!file.exists()) {
+            // Defaults if no file exists
+            data.put("skins", "default");
+            data.put("highScore", "0");
+            save();
+            return data;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("=", 2);
-                if (parts.length == 2) {
-                    data.put(parts[0], parts[1]);
+            while ((line = br.readLine()) != null) {
+                if (line.contains("=")) {
+                    String[] parts = line.split("=", 2);
+                    data.put(parts[0].trim(), parts[1].trim());
                 }
             }
         } catch (IOException e) {
-            // default values
-            data.put("highScore", "0");
-            data.put("skins", "default");
+            e.printStackTrace();
         }
-        return data;
+
+        return data; // return loaded data
     }
 
-    // Save updated score and skins
-    public static void save(Map<String, String> data) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (String key : data.keySet()) {
-                writer.write(key + "=" + data.get(key));
-                writer.newLine();
+    // Save data to file
+    public static void save() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DATA_FILE))) {
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                bw.write(entry.getKey() + "=" + entry.getValue());
+                bw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error saving game data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Get value by key
+    public static String get(String key) {
+        return data.getOrDefault(key, "");
+    }
+
+    // Set and save immediately
+    public static void set(String key, String value) {
+        data.put(key, value);
+        save();
+    }
+
+    // High score update
+    public static void updateHighScore(int score) {
+        int currentHigh = Integer.parseInt(get("highScore"));
+        if (score > currentHigh) {
+            set("highScore", String.valueOf(score));
         }
     }
 }
