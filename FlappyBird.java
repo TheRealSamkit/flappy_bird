@@ -11,10 +11,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     boolean testMode = false; //set to true to skip the game logic and just place pipes for testing purposes
 
     //images
-    Image backgroundImg;
-    Image birdImg;
-    Image topPipeImg;
-    Image bottomPipeImg;
+    Image backgroundImg,birdImg,topPipeImg,bottomPipeImg;
 
     //bird class
     int birdX = boardWidth/8;
@@ -58,8 +55,12 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     //game logic
     Bird bird;
-    int velocityX = -4; //move pipes to the left speed (simulates bird moving right)
-    int velocityY = 0; //move bird up/down speed.
+    int velocityX = -4;
+    /*move pipes to the left speed (simulates bird
+     moving right)
+     * move bird up/down speed.
+    */
+    int velocityY = 0; 
     int gravity = 1;
     int difficulty = 24;
 
@@ -72,8 +73,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     boolean gameOver = false;
     double score = 0;
     int highScore = 0;
-    int lastScoreCheck = 0; // declare at class level
-    int lastDelayCheck = 0; // declare at class level
+    int lastScoreCheck = 0; 
+    // declare at class level
+    int lastDelayCheck = 0; 
+    // declare at class level
 
     FlappyBird() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -106,7 +109,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         placePipeTimer.start();
         
 		//game timer
-		gameLoop = new Timer(1000/difficulty, this); //how long it takes to start timer, milliseconds gone between frames 
+		gameLoop = new Timer(1000/difficulty, this); 
+        /*how long it takes to start timer,
+         milliseconds gone between frames */
         gameLoop.start();
 	}
     
@@ -157,14 +162,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             g.drawString("Score: " + (int) score, boardWidth / 4, boardHeight / 2 - 100);
             g.drawString("High Score", boardWidth / 6, boardHeight / 2 - 50);
             g.drawString(""+highScore, boardWidth / 2 - 25, boardHeight / 2 - 10);
-            
-
-            // g.setColor(Color.darkGray);
-            // g.fill3DRect(boardWidth / 8 - 10, boardHeight - 100, 135 * 2 + 20, 50 + 20, true);
-            // g.setColor(Color.black);
-            // g.fillRect(boardWidth / 8, boardHeight - 90, 135 * 2, 50);
-            // g.setColor(Color.white);
-            // g.drawString("Press Spacebar to Start", boardWidth / 8, boardHeight - 70);
         }
         else {
             g.drawString(String.valueOf((int) score),boardWidth / 2 - 10, boardHeight / 2 - 175 );
@@ -177,8 +174,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 	}
 
     public void move() {
-        //test mode
-        // Only trigger when crossing the threshold for the first time
     if (score % 5 == 0 && score > 5 && score != lastScoreCheck) {
         if(difficulty < 60){
             difficulty += 5;
@@ -190,16 +185,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         }
         System.out.println("FPS: " + difficulty);
         System.out.println("Delay: " + delay);
-        lastScoreCheck = (int) score; // Update lastScoreCheck to the current score
-    }
-
-        // if (score % 5 == 0 && velocityX > -10) {
-        //     velocityX -= 1; // every 5 points, increase speed
-        // }
-        
+        lastScoreCheck = (int) score; 
+        // Update lastScoreCheck to the current score
+    }        
         //bird
         if(!testMode){
-            bird.y = Math.max(bird.y, 0); //apply gravity to current bird.y, limit the bird.y to top of the canvas
+            bird.y = Math.max(bird.y, 0);
+             /*apply gravity to current bird.y,
+              limit the bird.y to top of the canvas*/
             bird.y += velocityY;
             velocityY += gravity;
         }
@@ -209,7 +202,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             pipe.x += velocityX;
 
             if (!pipe.passed && bird.x > pipe.x + pipe.width) {
-                score += 0.5; //0.5 because there are 2 pipes! so 0.5*2 = 1, 1 for each set of pipes
+                score += 0.5; 
+                //0.5 because there are 2 pipes! so 0.5*2 = 1, 1 for each set of pipes
                 pipe.passed = true;
             }
 
@@ -226,14 +220,19 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     }
 
     boolean collision(Bird a, Pipe b) {
-        return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner
-               a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
-               a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
-               a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+        return a.x < b.x + b.width &&  
+         //a's top left corner doesn't reach b's top right corner
+               a.x + a.width > b.x &&   
+               //a's top right corner passes b's top left corner
+               a.y < b.y + b.height &&  
+               //a's top left corner doesn't reach b's bottom left corner
+               a.y + a.height > b.y;    
+               //a's bottom left corner passes b's top left corner
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) { //called every x milliseconds by gameLoop timer
+    public void actionPerformed(ActionEvent e) {
+         //called every x milliseconds by gameLoop timer
         move();
         repaint();
         if (gameOver) {

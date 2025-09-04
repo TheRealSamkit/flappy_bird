@@ -19,10 +19,5 @@ public class App  {
         frame.pack();
         homeScreen.requestFocus();
         frame.setVisible(true);
-        // FlappyBird flappyBird = new FlappyBird();
-        // frame.add(flappyBird);
-        // frame.pack();
-        // flappyBird.requestFocus();
-        // frame.setVisible(true);
     }
 }

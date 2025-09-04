@@ -1,8 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class homeScreen extends JPanel implements ActionListener, KeyListener {
+public class homeScreen extends JPanel{
     int boardWidth = 360;
     int boardHeight = 640;
 
@@ -35,8 +34,7 @@ public class homeScreen extends JPanel implements ActionListener, KeyListener {
             flappyBird.requestFocus();
             frame.setVisible(true);
         });
-        // Add key listener to the button
-
+        
         add(titleLabel);
         add(creditLabel);
         add(startButton);
@@ -57,24 +55,5 @@ public class homeScreen extends JPanel implements ActionListener, KeyListener {
 
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, this.boardWidth, this.boardHeight, null);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            startButton.doClick();
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
     }
 }
